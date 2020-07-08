@@ -1,0 +1,96 @@
+﻿
+<h2> Return Car</h2>
+
+<hr />
+
+@using (Html.BeginForm("Return", "returncar", FormMethod.Post, new { id = "popupform" }))
+{
+
+    <div class="form-row" style="width:80%">
+
+        <div class="form-group col-sm-6">
+            <label for="carno">Car No</label>
+            <input type="text" class="form-control" id="carno" name="carno" placeholder="Car No">
+
+        </div>
+        <div class="form-group col-sm-6">
+            <label for="custname">Customer ID</label>
+            <input type="text" class="form-control" id="custid" name="custid" placeholder="Customer ID">
+        </div>
+
+    </div>
+
+    <div class="form-row" style="width:80%">
+        <div class="form-group col-sm-6">
+            <label for="Date">Date</label>
+            <input type="text" class="form-control" id="date" placeholder="Date" name="date">
+        </div>
+
+    </div>
+
+    <div class="form-row" style="width:80%">
+        <div class="form-group col-sm-3">
+            <label for="elsp">Days Elapsed</label>
+            <input type="text" class="form-control" id="elsp" name="elsp">
+        </div>
+        <div class="form-group col-sm-3">
+            <label for="rentalfee">Fine</label>
+            <input type="text" class="form-control" id="fine" name="fine">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-sm-3">
+            <button type="submit" value="Return" class="btn btn-success">Save</button>
+        </div>
+
+    </div>
+}
+
+
+@section scripts
+    {
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+
+    <script>
+
+        getCarid();
+        function getCarid() {
+            $("#carno").keyup(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/returncar/Getid?carno=' + $("#carno").val(),
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $("#custid").val(data[0].Custid);
+                        $("#date").val(new Date(parseInt(data[0].EndDate.substr(6))).toLocaleString());
+                        $("#elsp").val(data[0].ElapsedDays);
+
+                        var elsp = data[0].ElapsedDays;
+                        if (elsp > 0) {
+                            var fine = elsp * 100;
+                            $("#fine").val(fine.toString());
+                        } else {
+                            $("#fine").val("0");
+                        }
+
+
+                    }
+                });
+
+            });
+
+
+        }
+
+
+    </script>
+
+
+
+
+}
+
+

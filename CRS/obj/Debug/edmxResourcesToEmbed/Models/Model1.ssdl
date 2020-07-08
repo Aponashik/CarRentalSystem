@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="supercarModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="carreg">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="carno" Type="varchar" MaxLength="50" />
+    <Property Name="make" Type="varchar" MaxLength="50" />
+    <Property Name="model" Type="varchar" MaxLength="50" />
+    <Property Name="available" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="customer">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="custname" Type="varchar" MaxLength="50" />
+    <Property Name="address" Type="varchar" MaxLength="50" />
+    <Property Name="email" Type="varchar" MaxLength="50" />
+    <Property Name="mobile" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="rent">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="carid" Type="varchar" MaxLength="50" />
+    <Property Name="custid" Type="varchar" MaxLength="50" />
+    <Property Name="fee" Type="int" />
+    <Property Name="sdate" Type="date" />
+    <Property Name="edate" Type="date" />
+  </EntityType>
+  <EntityType Name="returncar">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="carno" Type="varchar" MaxLength="50" />
+    <Property Name="custid" Type="int" />
+    <Property Name="date" Type="date" />
+    <Property Name="elsp" Type="int" />
+    <Property Name="fine" Type="int" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="50" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityContainer Name="supercarModelStoreContainer">
+    <EntitySet Name="carreg" EntityType="Self.carreg" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="customer" EntityType="Self.customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="rent" EntityType="Self.rent" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="returncar" EntityType="Self.returncar" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,232 @@
+﻿
+@model IEnumerable<CRS.Models.RentalViewModel>
+
+<h2>Car Rent</h2>
+
+<hr />
+
+    @using (Html.BeginForm("Save", "rent", FormMethod.Post, new { id = "popupform" }))
+    {
+
+<div class="form-row" style="width:80%">
+
+    <div class="form-group col-sm-6">
+        <label for="carno">Car No</label>
+        <select id="carid" class="form-control" name="carid">
+            <option>Please Select</option>
+        </select>
+    </div>
+    <div class="form-group col-sm-6">
+        <label for="custname">Customer Name</label>
+        <input type="text" class="form-control" id="custname" placeholder="Customer Name">
+    </div>
+    
+</div>
+
+        <div class="form-row" style="width:80%">
+            <div class="form-group col-sm-6">
+                <label for="custid">Customer ID</label>
+                <input type="text" class="form-control" id="custid" placeholder="Customer ID" name="custid">
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="custemail">Customer Email</label>
+                <input type="email" class="form-control" id="custemail" placeholder="Customer Email">
+            </div>
+        </div>
+
+        <div class="form-row" style="width:80%">
+            <div class="form-group col-sm-3">
+                <label for="rentalfee">Rental Fee</label>
+                <input type="text" class="form-control" id="fee" name="fee">
+            </div>
+
+            <div class="form-group col-sm-3">
+
+            </div>
+
+
+            <div class="form-group col-sm-3">
+                <label for="sdate">Start Date</label>
+                <input type="date" class="form-control" id="sdate" name="sdate">
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="edate">End Date</label>
+                <input type="date" class="form-control" id="edate" name="edate">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-sm-3">
+                <button type="submit" value="Save" class="btn btn-success">Save</button>
+            </div>
+
+        </div>
+    }
+
+    <div class="container">
+        <table id="table">
+            <tr>
+                <th>Car No</th>
+                <th>Customer ID</th>
+                <th>Fee</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Available</th>
+               
+
+            </tr>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@item.carid</td>
+                <td>@item.custid</td>
+                <td>@item.fee</td>
+                <td>@item.sdate</td>
+                <td>@item.edate</td>
+                <td>@item.available</td>
+                
+                
+               
+            </tr>
+            }
+        </table>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@section scripts
+    {
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+
+    <script>
+        Getcar();
+        load();
+        function load() {
+            $("#custid").attr("disabled", "disabled");
+            $("#custname").attr("disabled", "disabled");
+            $("#custemail").attr("disabled", "disabled");
+            $("#rentalfee").attr("disabled", "disabled");
+            $("#sdate").attr("disabled", "disabled");
+            $("#edate").attr("disabled", "disabled");
+        }
+
+
+        
+        function Getcar() {
+            $.ajax({
+
+                type: 'GET',
+                url: '/rent/Getcar',
+                dataType: 'JSON',
+                success: function (data) {
+                    console.log(data);
+                    for (var i = 0; i < data.length; i++) {
+                        $("#carid").append($("<option/>", {
+                            text: data[i].carno
+                        }));
+                    }
+            }
+            });
+        }
+
+        //for car availabilty
+        $("#carid").change(function () {
+            available();
+        });
+
+        function available() {
+            $.ajax({
+                type: 'POST',
+                url: '/rent/Getavail?carno=' + $("#carid").val(),
+                dataType: 'JSON',
+                success: function (data) {
+                    var avl = data;
+                    if (avl == "Yes") {
+                        $("#custid").removeAttr('disabled');
+                        $("#custname").removeAttr('disabled');
+                        $("#custemail").removeAttr('disabled');
+                        $("#rentalfee").removeAttr('disabled');
+                        $("#sdate").removeAttr('disabled');
+                        $("#edate").removeAttr('disabled');
+                    }
+                    else {
+                        $("#custid").attr("disabled", "disabled");
+                        $("#custname").attr("disabled", "disabled");
+                        $("#custemail").attr("disabled", "disabled");
+                        $("#rentalfee").attr("disabled", "disabled");
+                        $("#sdate").attr("disabled", "disabled");
+                        $("#edate").attr("disabled", "disabled");
+                    }
+                }
+            });
+        }
+
+        Getcustemail();
+        function Getcustemail() {
+            $("#custid").keyup(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/rent/Getemail?id=' + $("#custid").val(),
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $("#custemail").val(data)
+                    }
+                });
+
+            });
+
+
+        }
+
+
+
+
+        Getcustomer();
+        function Getcustomer() {
+            $("#custid").keyup(function (e) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/rent/Getid?id='+ $("#custid").val(),
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $("#custname").val(data)
+                            
+                       
+                    }
+                });
+
+            });
+
+      
+        }
+
+       
+        
+
+
+    </script>
+
+}
